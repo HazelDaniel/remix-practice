@@ -8,7 +8,8 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useNavigation
+  useNavigation,
+  useSubmit
 } from "/build/_shared/chunk-4EN5BOYW.js";
 import "/build/_shared/chunk-GIAAE3CH.js";
 import {
@@ -18,7 +19,9 @@ import "/build/_shared/chunk-UWV35TSL.js";
 import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-XU7DNSPJ.js";
-import "/build/_shared/chunk-BOXFZXVX.js";
+import {
+  require_react
+} from "/build/_shared/chunk-BOXFZXVX.js";
 import {
   __toESM
 } from "/build/_shared/chunk-PNG5AS42.js";
@@ -27,6 +30,7 @@ import {
 var app_default = "/build/_assets/app-V3UKCKY4.css";
 
 // app/root.tsx
+var import_react2 = __toESM(require_react());
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime());
 if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
   console.warn("remix:hmr: React Fast Refresh only works when the Remix compiler is running in development mode.");
@@ -60,69 +64,80 @@ function App() {
     q
   } = useLoaderData();
   const navigation = useNavigation();
+  const submit = useSubmit();
+  const searching = navigation.location && new URLSearchParams(navigation.location.search).has("q");
+  (0, import_react2.useEffect)(() => {
+    const searchField = document.getElementById("q");
+    searchField.value = q || "";
+  }, [q]);
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("html", { lang: "en", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("head", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("meta", { charSet: "utf-8" }, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 54,
+        lineNumber: 61,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 55,
+        lineNumber: 62,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Meta, {}, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 56,
+        lineNumber: 63,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Links, {}, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 57,
+        lineNumber: 64,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/root.tsx",
-      lineNumber: 53,
+      lineNumber: 60,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("body", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { id: "sidebar", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", { children: "Remix Contacts" }, void 0, false, {
           fileName: "app/root.tsx",
-          lineNumber: 61,
+          lineNumber: 68,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Form, { id: "search-form", role: "search", children: [
-            /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", { id: "q", "aria-label": "Search contacts", placeholder: "Search", type: "search", name: "q", defaultValue: q || "" }, void 0, false, {
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Form, { id: "search-form", role: "search", onChange: (event) => {
+            const isFirstSearch = q === null;
+            submit(event.currentTarget, {
+              replace: !isFirstSearch
+            });
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", { id: "q", "aria-label": "Search contacts", placeholder: "Search", className: searching ? "loading" : "", type: "search", name: "q", defaultValue: q || "" }, void 0, false, {
               fileName: "app/root.tsx",
-              lineNumber: 64,
+              lineNumber: 77,
               columnNumber: 15
             }, this),
-            /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { id: "search-spinner", "aria-hidden": true, hidden: true }, void 0, false, {
+            /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { id: "search-spinner", "aria-hidden": true, hidden: !searching }, void 0, false, {
               fileName: "app/root.tsx",
-              lineNumber: 66,
+              lineNumber: 79,
               columnNumber: 15
             }, this)
           ] }, void 0, true, {
             fileName: "app/root.tsx",
-            lineNumber: 63,
+            lineNumber: 70,
             columnNumber: 13
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Form, { method: "post", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { type: "submit", children: "New" }, void 0, false, {
             fileName: "app/root.tsx",
-            lineNumber: 69,
+            lineNumber: 82,
             columnNumber: 15
           }, this) }, void 0, false, {
             fileName: "app/root.tsx",
-            lineNumber: 68,
+            lineNumber: 81,
             columnNumber: 13
           }, this)
         ] }, void 0, true, {
           fileName: "app/root.tsx",
-          lineNumber: 62,
+          lineNumber: 69,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("nav", { children: contacts.length ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("ul", { children: contacts.map((contact) => /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("li", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(NavLink, { className: ({
@@ -137,85 +152,85 @@ function App() {
             contact.last
           ] }, void 0, true, {
             fileName: "app/root.tsx",
-            lineNumber: 82,
+            lineNumber: 95,
             columnNumber: 56
           }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("i", { children: "No Name" }, void 0, false, {
             fileName: "app/root.tsx",
-            lineNumber: 84,
+            lineNumber: 97,
             columnNumber: 31
           }, this),
           contact.favorite ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "\u2605" }, void 0, false, {
             fileName: "app/root.tsx",
-            lineNumber: 86,
+            lineNumber: 99,
             columnNumber: 43
           }, this) : null
         ] }, void 0, true, {
           fileName: "app/root.tsx",
-          lineNumber: 75,
+          lineNumber: 88,
           columnNumber: 21
         }, this) }, contact.id, false, {
           fileName: "app/root.tsx",
-          lineNumber: 74,
+          lineNumber: 87,
           columnNumber: 42
         }, this)) }, void 0, false, {
           fileName: "app/root.tsx",
-          lineNumber: 73,
+          lineNumber: 86,
           columnNumber: 32
         }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("i", { children: "No contacts" }, void 0, false, {
           fileName: "app/root.tsx",
-          lineNumber: 90,
+          lineNumber: 103,
           columnNumber: 17
         }, this) }, void 0, false, {
           fileName: "app/root.tsx",
-          lineNumber: 89,
+          lineNumber: 102,
           columnNumber: 23
         }, this) }, void 0, false, {
           fileName: "app/root.tsx",
-          lineNumber: 72,
+          lineNumber: 85,
           columnNumber: 11
         }, this)
       ] }, void 0, true, {
         fileName: "app/root.tsx",
-        lineNumber: 60,
+        lineNumber: 67,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { id: "detail", className: navigation.state === "loading" ? "loading" : "", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 98,
+        lineNumber: 111,
         columnNumber: 11
       }, this) }, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 96,
+        lineNumber: 109,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ScrollRestoration, {}, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 101,
+        lineNumber: 114,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Scripts, {}, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 102,
+        lineNumber: 115,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(LiveReload, {}, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 103,
+        lineNumber: 116,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/root.tsx",
-      lineNumber: 59,
+      lineNumber: 66,
       columnNumber: 7
     }, this)
   ] }, void 0, true, {
     fileName: "app/root.tsx",
-    lineNumber: 52,
+    lineNumber: 59,
     columnNumber: 10
   }, this);
 }
-_s(App, "y7tNg/eS3LGvn5W9ifHh8Rh85iY=", false, function() {
-  return [useLoaderData, useNavigation];
+_s(App, "bsYwNJAcI2cV6W75urp8P8f5nbA=", false, function() {
+  return [useLoaderData, useNavigation, useSubmit];
 });
 _c = App;
 var _c;
@@ -226,4 +241,4 @@ export {
   App as default,
   links
 };
-//# sourceMappingURL=/build/root-6ZN6VD4O.js.map
+//# sourceMappingURL=/build/root-WYFDIXWX.js.map
