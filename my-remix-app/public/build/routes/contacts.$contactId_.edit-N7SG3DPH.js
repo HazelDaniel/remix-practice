@@ -1,17 +1,18 @@
 import "/build/_shared/chunk-AUYLHJJM.js";
 import {
   Form,
-  useLoaderData
-} from "/build/_shared/chunk-SONSSR3I.js";
+  useLoaderData,
+  useNavigate
+} from "/build/_shared/chunk-4EN5BOYW.js";
+import "/build/_shared/chunk-GIAAE3CH.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-PZEU5VJO.js";
+import "/build/_shared/chunk-UWV35TSL.js";
 import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-XU7DNSPJ.js";
-import "/build/_shared/chunk-GIAAE3CH.js";
 import "/build/_shared/chunk-BOXFZXVX.js";
-import "/build/_shared/chunk-UWV35TSL.js";
 import {
   __commonJS,
   __toESM
@@ -45,107 +46,110 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/contacts.$contactId_.edit.tsx"
   );
-  import.meta.hot.lastModified = "1709168565001.6084";
+  import.meta.hot.lastModified = "1709919002358.7893";
 }
 function EditContact() {
   _s();
   const {
     contact
   } = useLoaderData();
+  const navigate = useNavigate();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Form, { id: "contact-form", method: "post", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "Name" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 57,
+        lineNumber: 58,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", { defaultValue: contact.first, "aria-label": "First name", name: "first", type: "text", placeholder: "First" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 58,
+        lineNumber: 59,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", { "aria-label": "Last name", defaultValue: contact.last, name: "last", placeholder: "Last", type: "text" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 59,
+        lineNumber: 60,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/contacts.$contactId_.edit.tsx",
-      lineNumber: 56,
+      lineNumber: 57,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("label", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "Twitter" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 62,
+        lineNumber: 63,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", { defaultValue: contact.twitter, name: "twitter", placeholder: "@jack", type: "text" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 63,
+        lineNumber: 64,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/contacts.$contactId_.edit.tsx",
-      lineNumber: 61,
+      lineNumber: 62,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("label", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "Avatar URL" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 66,
+        lineNumber: 67,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", { "aria-label": "Avatar URL", defaultValue: contact.avatar, name: "avatar", placeholder: "https://example.com/avatar.jpg", type: "text" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 67,
+        lineNumber: 68,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/contacts.$contactId_.edit.tsx",
-      lineNumber: 65,
+      lineNumber: 66,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("label", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "Notes" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 70,
+        lineNumber: 71,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("textarea", { defaultValue: contact.notes, name: "notes", rows: 6 }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 71,
+        lineNumber: 72,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/contacts.$contactId_.edit.tsx",
-      lineNumber: 69,
+      lineNumber: 70,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { type: "submit", children: "Save" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 74,
+        lineNumber: 75,
         columnNumber: 9
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { type: "button", children: "Cancel" }, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", { type: "button", onClick: () => {
+        navigate(-1);
+      }, children: "Cancel" }, void 0, false, {
         fileName: "app/routes/contacts.$contactId_.edit.tsx",
-        lineNumber: 75,
+        lineNumber: 76,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/contacts.$contactId_.edit.tsx",
-      lineNumber: 73,
+      lineNumber: 74,
       columnNumber: 7
     }, this)
   ] }, contact.id, true, {
     fileName: "app/routes/contacts.$contactId_.edit.tsx",
-    lineNumber: 55,
+    lineNumber: 56,
     columnNumber: 10
   }, this);
 }
-_s(EditContact, "fVXFZ2DHJWBPDlTt0dS34HtRFN4=", false, function() {
-  return [useLoaderData];
+_s(EditContact, "hNBbUOQ8Y0dVUNq/e/mHDN0KVVU=", false, function() {
+  return [useLoaderData, useNavigate];
 });
 _c = EditContact;
 var _c;
@@ -155,4 +159,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   EditContact as default
 };
-//# sourceMappingURL=/build/routes/contacts.$contactId_.edit-OWYLZPKC.js.map
+//# sourceMappingURL=/build/routes/contacts.$contactId_.edit-N7SG3DPH.js.map

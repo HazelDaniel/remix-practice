@@ -13,7 +13,7 @@ import {
   useNavigation,
 } from "@remix-run/react";
 
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, loaderFunctionArgs } from "@remix-run/node";
 import AppStylesHref from "./app.css";
 import { createEmptyContact, getContacts } from "./data";
 
@@ -21,9 +21,11 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: AppStylesHref }];
 };
 
-export const loader = async () => {
-  const contacts = await getContacts();
-  return json({ contacts });
+export const loader = async ({ request }: loaderFunctionArgs) => {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const contacts = await getContacts(q);
+  return json({ contacts , q });
 };
 
 export const action = async () => {
@@ -32,7 +34,7 @@ export const action = async () => {
 };
 
 export default function App() {
-  const { contacts } = useLoaderData<typeof loader>();
+  const { contacts, q } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   return (
     <html lang="en">
@@ -53,6 +55,7 @@ export default function App() {
                 placeholder="Search"
                 type="search"
                 name="q"
+                defaultValue={q || ""}
               />
               <div id="search-spinner" aria-hidden hidden={true} />
             </Form>
