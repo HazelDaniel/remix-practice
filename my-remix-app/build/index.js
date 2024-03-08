@@ -142,6 +142,7 @@ function handleBrowserRequest(request, responseStatusCode, responseHeaders, remi
 // app/root.tsx
 var root_exports = {};
 __export(root_exports, {
+  action: () => action,
   default: () => App,
   links: () => links,
   loader: () => loader
@@ -180,6 +181,18 @@ async function getContacts(query) {
   return query && (contacts = (0, import_match_sorter.matchSorter)(contacts, query, {
     keys: ["first", "last"]
   })), contacts.sort((0, import_sort_by.default)("last", "createdAt"));
+}
+async function createEmptyContact() {
+  return await fakeContacts.create({});
+}
+async function getContact(id) {
+  return fakeContacts.get(id);
+}
+async function updateContact(id, updates) {
+  let contact = await fakeContacts.get(id);
+  if (!contact)
+    throw new Error(`No contact found for ${id}`);
+  return await fakeContacts.set(id, { ...contact, ...updates }), contact;
 }
 [
   {
@@ -374,41 +387,44 @@ async function getContacts(query) {
 var import_jsx_dev_runtime2 = require("react/jsx-dev-runtime"), links = () => [{ rel: "stylesheet", href: app_default }], loader = async () => {
   let contacts = await getContacts();
   return (0, import_react2.json)({ contacts });
+}, action = async () => {
+  let contact = await createEmptyContact();
+  return (0, import_react2.redirect)(`/contacts/${contact.id}/edit`);
 };
 function App() {
-  let { contacts } = (0, import_react2.useLoaderData)();
+  let { contacts } = (0, import_react2.useLoaderData)(), navigation = (0, import_react2.useNavigation)();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("html", { lang: "en", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("head", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("meta", { charSet: "utf-8" }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 32,
+        lineNumber: 40,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 33,
+        lineNumber: 41,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.Meta, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 34,
+        lineNumber: 42,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.Links, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 35,
+        lineNumber: 43,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/root.tsx",
-      lineNumber: 31,
+      lineNumber: 39,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("body", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { id: "sidebar", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("h1", { children: "Remix Contacts" }, void 0, !1, {
           fileName: "app/root.tsx",
-          lineNumber: 39,
+          lineNumber: 47,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
@@ -426,119 +442,319 @@ function App() {
               !1,
               {
                 fileName: "app/root.tsx",
-                lineNumber: 42,
+                lineNumber: 50,
                 columnNumber: 15
               },
               this
             ),
             /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { id: "search-spinner", "aria-hidden": !0, hidden: !0 }, void 0, !1, {
               fileName: "app/root.tsx",
-              lineNumber: 49,
+              lineNumber: 57,
               columnNumber: 15
             }, this)
           ] }, void 0, !0, {
             fileName: "app/root.tsx",
-            lineNumber: 41,
+            lineNumber: 49,
             columnNumber: 13
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.Form, { method: "post", children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("button", { type: "submit", children: "New" }, void 0, !1, {
             fileName: "app/root.tsx",
-            lineNumber: 52,
+            lineNumber: 60,
             columnNumber: 15
           }, this) }, void 0, !1, {
             fileName: "app/root.tsx",
-            lineNumber: 51,
+            lineNumber: 59,
             columnNumber: 13
           }, this)
         ] }, void 0, !0, {
           fileName: "app/root.tsx",
-          lineNumber: 40,
+          lineNumber: 48,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("nav", { children: contacts.length ? /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("ul", { children: contacts.map(
-          (contact) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("li", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.Link, { to: `contacts/${contact.id}`, children: [
-            contact.first || contact.last ? /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_jsx_dev_runtime2.Fragment, { children: [
-              contact.first,
-              " ",
-              contact.last
-            ] }, void 0, !0, {
+          (contact) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("li", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+            import_react2.NavLink,
+            {
+              className: ({ isActive, isPending }) => isActive ? "active" : isPending ? "pending" : "",
+              to: `contacts/${contact.id}`,
+              prefetch: "render",
+              children: [
+                contact.first || contact.last ? /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_jsx_dev_runtime2.Fragment, { children: [
+                  contact.first,
+                  " ",
+                  contact.last
+                ] }, void 0, !0, {
+                  fileName: "app/root.tsx",
+                  lineNumber: 76,
+                  columnNumber: 19
+                }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("i", { children: "No Name" }, void 0, !1, {
+                  fileName: "app/root.tsx",
+                  lineNumber: 80,
+                  columnNumber: 19
+                }, this),
+                contact.favorite ? /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("span", { children: "\u2605" }, void 0, !1, {
+                  fileName: "app/root.tsx",
+                  lineNumber: 82,
+                  columnNumber: 43
+                }, this) : null
+              ]
+            },
+            void 0,
+            !0,
+            {
               fileName: "app/root.tsx",
-              lineNumber: 62,
-              columnNumber: 19
-            }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("i", { children: "No Name" }, void 0, !1, {
-              fileName: "app/root.tsx",
-              lineNumber: 66,
-              columnNumber: 19
-            }, this),
-            " ",
-            contact.favorite ? /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("span", { children: "\u2605" }, void 0, !1, {
-              fileName: "app/root.tsx",
-              lineNumber: 69,
-              columnNumber: 19
-            }, this) : null
-          ] }, void 0, !0, {
+              lineNumber: 68,
+              columnNumber: 21
+            },
+            this
+          ) }, contact.id, !1, {
             fileName: "app/root.tsx",
-            lineNumber: 60,
-            columnNumber: 21
-          }, this) }, contact.id, !1, {
-            fileName: "app/root.tsx",
-            lineNumber: 59,
+            lineNumber: 67,
             columnNumber: 15
           }, this)
         ) }, void 0, !1, {
           fileName: "app/root.tsx",
-          lineNumber: 57,
+          lineNumber: 65,
           columnNumber: 13
         }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("p", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("i", { children: "No contacts" }, void 0, !1, {
           fileName: "app/root.tsx",
-          lineNumber: 77,
+          lineNumber: 89,
           columnNumber: 17
         }, this) }, void 0, !1, {
           fileName: "app/root.tsx",
-          lineNumber: 76,
+          lineNumber: 88,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/root.tsx",
-          lineNumber: 55,
+          lineNumber: 63,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/root.tsx",
-        lineNumber: 38,
+        lineNumber: 46,
         columnNumber: 9
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { id: "detail", children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.Outlet, {}, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 84,
-        columnNumber: 6
-      }, this) }, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 83,
-        columnNumber: 5
-      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+        "div",
+        {
+          id: "detail",
+          className: navigation.state === "loading" ? "loading" : "",
+          children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.Outlet, {}, void 0, !1, {
+            fileName: "app/root.tsx",
+            lineNumber: 99,
+            columnNumber: 11
+          }, this)
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/root.tsx",
+          lineNumber: 95,
+          columnNumber: 9
+        },
+        this
+      ),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.ScrollRestoration, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 87,
+        lineNumber: 102,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.Scripts, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 88,
+        lineNumber: 103,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react2.LiveReload, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 89,
+        lineNumber: 104,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/root.tsx",
-      lineNumber: 37,
+      lineNumber: 45,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/root.tsx",
-    lineNumber: 30,
+    lineNumber: 38,
+    columnNumber: 5
+  }, this);
+}
+
+// app/routes/contacts.$contactId_.edit.tsx
+var contacts_contactId_edit_exports = {};
+__export(contacts_contactId_edit_exports, {
+  action: () => action2,
+  default: () => EditContact,
+  loader: () => loader2
+});
+var import_node2 = require("@remix-run/node"), import_react3 = require("@remix-run/react"), import_tiny_invariant2 = __toESM(require("tiny-invariant"));
+var import_jsx_dev_runtime3 = require("react/jsx-dev-runtime"), loader2 = async ({
+  params
+}) => {
+  (0, import_tiny_invariant2.default)(params.contactId, "Missing contactId param");
+  let contact = await getContact(params.contactId);
+  if (!contact)
+    throw new Response("Not Found", { status: 404 });
+  return (0, import_node2.json)({ contact });
+}, action2 = async ({ params, request }) => {
+  (0, import_tiny_invariant2.default)(params.contactId, "Missing contact Id");
+  let formData = await request.formData(), updates = Object.fromEntries(formData);
+  return await updateContact(params.contactId, updates), (0, import_node2.redirect)(`/contacts/${params.contactId}`);
+};
+function EditContact() {
+  let { contact } = (0, import_react3.useLoaderData)();
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react3.Form, { id: "contact-form", method: "post", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("p", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("span", { children: "Name" }, void 0, !1, {
+        fileName: "app/routes/contacts.$contactId_.edit.tsx",
+        lineNumber: 33,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+        "input",
+        {
+          defaultValue: contact.first,
+          "aria-label": "First name",
+          name: "first",
+          type: "text",
+          placeholder: "First"
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/routes/contacts.$contactId_.edit.tsx",
+          lineNumber: 34,
+          columnNumber: 9
+        },
+        this
+      ),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+        "input",
+        {
+          "aria-label": "Last name",
+          defaultValue: contact.last,
+          name: "last",
+          placeholder: "Last",
+          type: "text"
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/routes/contacts.$contactId_.edit.tsx",
+          lineNumber: 41,
+          columnNumber: 9
+        },
+        this
+      )
+    ] }, void 0, !0, {
+      fileName: "app/routes/contacts.$contactId_.edit.tsx",
+      lineNumber: 32,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("label", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("span", { children: "Twitter" }, void 0, !1, {
+        fileName: "app/routes/contacts.$contactId_.edit.tsx",
+        lineNumber: 50,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+        "input",
+        {
+          defaultValue: contact.twitter,
+          name: "twitter",
+          placeholder: "@jack",
+          type: "text"
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/routes/contacts.$contactId_.edit.tsx",
+          lineNumber: 51,
+          columnNumber: 9
+        },
+        this
+      )
+    ] }, void 0, !0, {
+      fileName: "app/routes/contacts.$contactId_.edit.tsx",
+      lineNumber: 49,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("label", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("span", { children: "Avatar URL" }, void 0, !1, {
+        fileName: "app/routes/contacts.$contactId_.edit.tsx",
+        lineNumber: 59,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+        "input",
+        {
+          "aria-label": "Avatar URL",
+          defaultValue: contact.avatar,
+          name: "avatar",
+          placeholder: "https://example.com/avatar.jpg",
+          type: "text"
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/routes/contacts.$contactId_.edit.tsx",
+          lineNumber: 60,
+          columnNumber: 9
+        },
+        this
+      )
+    ] }, void 0, !0, {
+      fileName: "app/routes/contacts.$contactId_.edit.tsx",
+      lineNumber: 58,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("label", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("span", { children: "Notes" }, void 0, !1, {
+        fileName: "app/routes/contacts.$contactId_.edit.tsx",
+        lineNumber: 69,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+        "textarea",
+        {
+          defaultValue: contact.notes,
+          name: "notes",
+          rows: 6
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/routes/contacts.$contactId_.edit.tsx",
+          lineNumber: 70,
+          columnNumber: 9
+        },
+        this
+      )
+    ] }, void 0, !0, {
+      fileName: "app/routes/contacts.$contactId_.edit.tsx",
+      lineNumber: 68,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("p", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("button", { type: "submit", children: "Save" }, void 0, !1, {
+        fileName: "app/routes/contacts.$contactId_.edit.tsx",
+        lineNumber: 77,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("button", { type: "button", children: "Cancel" }, void 0, !1, {
+        fileName: "app/routes/contacts.$contactId_.edit.tsx",
+        lineNumber: 78,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, !0, {
+      fileName: "app/routes/contacts.$contactId_.edit.tsx",
+      lineNumber: 76,
+      columnNumber: 7
+    }, this)
+  ] }, contact.id, !0, {
+    fileName: "app/routes/contacts.$contactId_.edit.tsx",
+    lineNumber: 31,
     columnNumber: 5
   }, this);
 }
@@ -546,100 +762,101 @@ function App() {
 // app/routes/contacts.$contactId.tsx
 var contacts_contactId_exports = {};
 __export(contacts_contactId_exports, {
-  default: () => Contact
+  default: () => Contact,
+  loader: () => loader3
 });
-var import_react3 = require("@remix-run/react"), import_jsx_dev_runtime3 = require("react/jsx-dev-runtime");
+var import_react4 = require("@remix-run/react");
+var import_tiny_invariant3 = __toESM(require("tiny-invariant")), import_jsx_dev_runtime4 = require("react/jsx-dev-runtime"), loader3 = async ({ params }) => {
+  (0, import_tiny_invariant3.default)(params.contactId, "Missing contact Id param");
+  let contact = await getContact(params.contactId);
+  if (!contact)
+    throw new Response("Not Found", { status: 404 });
+  return (0, import_react4.json)({ contact });
+};
 function Contact() {
-  let contact = {
-    first: "Your",
-    last: "Name",
-    avatar: "https://placekitten.com/g/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: !0
-  };
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { id: "contact", children: [
-    /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+  let { contact } = (0, import_react4.useLoaderData)();
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("div", { id: "contact", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(
       "img",
       {
-        alt: `${contact.first} ${contact.last} avatar`,
-        src: contact.avatar
+        alt: `${contact?.first} ${contact?.last} avatar`,
+        src: contact?.avatar
       },
-      contact.avatar,
+      contact?.avatar,
       !1,
       {
         fileName: "app/routes/contacts.$contactId.tsx",
-        lineNumber: 19,
+        lineNumber: 23,
         columnNumber: 9
       },
       this
     ) }, void 0, !1, {
       fileName: "app/routes/contacts.$contactId.tsx",
-      lineNumber: 18,
+      lineNumber: 22,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("h1", { children: [
-        contact.first || contact.last ? /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_jsx_dev_runtime3.Fragment, { children: [
-          contact.first,
+    /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("h1", { children: [
+        contact?.first || contact?.last ? /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(import_jsx_dev_runtime4.Fragment, { children: [
+          contact?.first,
           " ",
-          contact.last
+          contact?.last
         ] }, void 0, !0, {
-          fileName: "app/routes/contacts.$contactId.tsx",
-          lineNumber: 29,
-          columnNumber: 13
-        }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("i", { children: "No Name" }, void 0, !1, {
           fileName: "app/routes/contacts.$contactId.tsx",
           lineNumber: 33,
           columnNumber: 13
+        }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("i", { children: "No Name" }, void 0, !1, {
+          fileName: "app/routes/contacts.$contactId.tsx",
+          lineNumber: 37,
+          columnNumber: 13
         }, this),
         " ",
-        /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(Favorite, { contact }, void 0, !1, {
+        /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(Favorite, { contact }, void 0, !1, {
           fileName: "app/routes/contacts.$contactId.tsx",
-          lineNumber: 35,
+          lineNumber: 39,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/contacts.$contactId.tsx",
-        lineNumber: 27,
+        lineNumber: 31,
         columnNumber: 9
       }, this),
-      contact.twitter ? /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("p", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+      contact?.twitter ? /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("p", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(
         "a",
         {
-          href: `https://twitter.com/${contact.twitter}`,
-          children: contact.twitter
+          href: `https://twitter.com/${contact?.twitter}`,
+          children: contact?.twitter
         },
         void 0,
         !1,
         {
           fileName: "app/routes/contacts.$contactId.tsx",
-          lineNumber: 40,
+          lineNumber: 44,
           columnNumber: 13
         },
         this
       ) }, void 0, !1, {
         fileName: "app/routes/contacts.$contactId.tsx",
-        lineNumber: 39,
+        lineNumber: 43,
         columnNumber: 11
       }, this) : null,
-      contact.notes ? /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("p", { children: contact.notes }, void 0, !1, {
+      contact?.notes ? /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("p", { children: contact?.notes }, void 0, !1, {
         fileName: "app/routes/contacts.$contactId.tsx",
-        lineNumber: 48,
-        columnNumber: 26
+        lineNumber: 52,
+        columnNumber: 27
       }, this) : null,
-      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react3.Form, { action: "edit", children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("button", { type: "submit", children: "Edit" }, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(import_react4.Form, { action: "edit", children: /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("button", { type: "submit", children: "Edit" }, void 0, !1, {
           fileName: "app/routes/contacts.$contactId.tsx",
-          lineNumber: 52,
+          lineNumber: 56,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/routes/contacts.$contactId.tsx",
-          lineNumber: 51,
+          lineNumber: 55,
           columnNumber: 11
         }, this),
-        /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
-          import_react3.Form,
+        /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(
+          import_react4.Form,
           {
             action: "destroy",
             method: "post",
@@ -648,9 +865,9 @@ function Contact() {
                 "Please confirm you want to delete this record."
               ) || event.preventDefault();
             },
-            children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("button", { type: "submit", children: "Delete" }, void 0, !1, {
+            children: /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("button", { type: "submit", children: "Delete" }, void 0, !1, {
               fileName: "app/routes/contacts.$contactId.tsx",
-              lineNumber: 67,
+              lineNumber: 71,
               columnNumber: 13
             }, this)
           },
@@ -658,30 +875,30 @@ function Contact() {
           !1,
           {
             fileName: "app/routes/contacts.$contactId.tsx",
-            lineNumber: 55,
+            lineNumber: 59,
             columnNumber: 11
           },
           this
         )
       ] }, void 0, !0, {
         fileName: "app/routes/contacts.$contactId.tsx",
-        lineNumber: 50,
+        lineNumber: 54,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/contacts.$contactId.tsx",
-      lineNumber: 26,
+      lineNumber: 30,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/contacts.$contactId.tsx",
-    lineNumber: 17,
+    lineNumber: 21,
     columnNumber: 5
   }, this);
 }
 var Favorite = ({ contact }) => {
-  let favorite = contact.favorite;
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react3.Form, { method: "post", children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(
+  let favorite = contact?.favorite;
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(import_react4.Form, { method: "post", children: /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(
     "button",
     {
       "aria-label": favorite ? "Remove from favorites" : "Add to favorites",
@@ -693,19 +910,19 @@ var Favorite = ({ contact }) => {
     !1,
     {
       fileName: "app/routes/contacts.$contactId.tsx",
-      lineNumber: 82,
+      lineNumber: 86,
       columnNumber: 7
     },
     this
   ) }, void 0, !1, {
     fileName: "app/routes/contacts.$contactId.tsx",
-    lineNumber: 81,
+    lineNumber: 85,
     columnNumber: 5
   }, this);
 };
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-Y7WZMQ5F.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-QLFN2MP7.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PZEU5VJO.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-NOG2TX5E.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/contacts.$contactId": { id: "routes/contacts.$contactId", parentId: "root", path: "contacts/:contactId", index: void 0, caseSensitive: void 0, module: "/build/routes/contacts.$contactId-XLZYPHXY.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "4c96e57f", hmr: { runtime: "/build/_shared/chunk-PZEU5VJO.js", timestamp: 1709162022852 }, url: "/build/manifest-4C96E57F.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-YI466YET.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-SONSSR3I.js", "/build/_shared/chunk-PZEU5VJO.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-X36LLWPR.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/contacts.$contactId": { id: "routes/contacts.$contactId", parentId: "root", path: "contacts/:contactId", index: void 0, caseSensitive: void 0, module: "/build/routes/contacts.$contactId-AFYASA3R.js", imports: ["/build/_shared/chunk-AUYLHJJM.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/contacts.$contactId_.edit": { id: "routes/contacts.$contactId_.edit", parentId: "root", path: "contacts/:contactId/edit", index: void 0, caseSensitive: void 0, module: "/build/routes/contacts.$contactId_.edit-OWYLZPKC.js", imports: ["/build/_shared/chunk-AUYLHJJM.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "56980aee", hmr: { runtime: "/build/_shared/chunk-PZEU5VJO.js", timestamp: 1709913665576 }, url: "/build/manifest-56980AEE.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
@@ -716,6 +933,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     index: void 0,
     caseSensitive: void 0,
     module: root_exports
+  },
+  "routes/contacts.$contactId_.edit": {
+    id: "routes/contacts.$contactId_.edit",
+    parentId: "root",
+    path: "contacts/:contactId/edit",
+    index: void 0,
+    caseSensitive: void 0,
+    module: contacts_contactId_edit_exports
   },
   "routes/contacts.$contactId": {
     id: "routes/contacts.$contactId",
